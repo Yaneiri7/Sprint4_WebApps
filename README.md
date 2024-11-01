@@ -49,13 +49,21 @@ The dashboard should open in a new browser tab, where you can explore data throu
 Project Structure
 plaintext
 Copy code
-├── data/
-│   └── vehicles_us.csv          # Dataset file
-├── notebooks/
-│   └── EDA.ipynb                # Jupyter Notebook with exploratory data analysis
-├── app.py                       # Streamlit app for dashboard
-├── README.md                    # Project documentation
-└── requirements.txt             # List of dependencies
+
+SPRINT4_WEBAPP_PROJECT/
+├── .idea/                        # IDE-specific configuration files
+├── .ipynb_checkpoints/           # Jupyter notebook checkpoint files
+├── .streamlit/                   # Streamlit configuration directory
+│   └── config.toml               # Streamlit configuration file
+├── notebook/
+│   └── EDA.ipynb                 # Jupyter Notebook with exploratory data analysis
+├── venv/                         # Virtual environment directory
+├── .gitignore                    # Git ignore file
+├── app.py                        # Streamlit app for the dashboard
+├── README.md                     # Project documentation
+├── requirements.txt              # List of dependencies
+└── vehicles_us.csv               # Dataset file
+           
 
 Usage
 Explore car price distributions and how they vary by attributes like model year and mileage.
