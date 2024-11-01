@@ -1,53 +1,24 @@
-import pandas as pd
-import scipy.stats
 import streamlit as st
-import time
+import pandas as pd
+import plotly.express as px
 
-# these are stateful variables which are preserved as Streamlin reruns this script
-if 'experiment_no' not in st.session_state:
-    st.session_state['experiment_no'] = 0
+# Load dataset
+df = pd.read_csv('./vehicles_us.csv')  # Adjust path if necessary
 
-if 'df_experiment_results' not in st.session_state:
-    st.session_state['df_experiment_results'] = pd.DataFrame(columns=['no', 'iterations', 'mean'])
+# Header
+st.header("Car Advertisement Data Dashboard")
 
-st.header('Tossing a Coin')
+# Histogram of car prices
+st.subheader("Distribution of Car Prices")
+fig = px.histogram(df, x='price', nbins=30, title="Distribution of Car Prices")
+st.plotly_chart(fig)
 
-chart = st.line_chart([0.5])
+# Scatter plot of price vs. odometer (mileage)
+st.subheader("Price vs. Odometer (Mileage)")
+fig = px.scatter(df, x='odometer', y='price', title="Price vs. Odometer of Cars")
+st.plotly_chart(fig)
 
-def toss_coin(n):
-
-    trial_outcomes = scipy.stats.bernoulli.rvs(p=0.5, size=n)
-
-    mean = None
-    outcome_no = 0
-    outcome_1_count = 0
-
-    for r in trial_outcomes:
-        outcome_no +=1
-        if r == 1:
-            outcome_1_count += 1
-        mean = outcome_1_count / outcome_no
-        chart.add_rows([mean])
-        time.sleep(0.05)
-
-    return mean
-
-number_of_trials = st.slider('Number of trials?', 1, 1000, 10)
-start_button = st.button('Run')
-
-if start_button:
-    st.write(f'Running the experiment of {number_of_trials} trials.')
-    st.session_state['experiment_no'] += 1
-    mean = toss_coin(number_of_trials)
-    st.session_state['df_experiment_results'] = pd.concat([
-        st.session_state['df_experiment_results'],
-        pd.DataFrame(data=[[st.session_state['experiment_no'],
-                            number_of_trials,
-                            mean]],
-                     columns=['no', 'iterations', 'mean'])
-        ],
-        axis=0)
-    st.session_state['df_experiment_results'] = \
-        st.session_state['df_experiment_results'].reset_index(drop=True)
-
-st.write(st.session_state['df_experiment_results'])
+# Checkbox to toggle additional details
+if st.checkbox("Show Price vs. Model Year Scatterplot"):
+    fig = px.scatter(df, x='model_year', y='price', title="Price vs. Model Year of Car")
+    st.plotly_chart(fig)
